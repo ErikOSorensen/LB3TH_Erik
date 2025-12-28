@@ -8,6 +8,68 @@ A Quarto-based website for documenting RF and electronics experiments.
 - [uv](https://docs.astral.sh/uv/) for Python environment management
 - R (optional, for R code blocks)
 
+## Platform Setup
+
+This project was developed on Ubuntu (WSL2) but works cross-platform.
+
+### Windows (Native)
+
+1. **Install Quarto**: Download the Windows installer from [quarto.org](https://quarto.org/docs/get-started/)
+
+2. **Install uv**: Open PowerShell and run:
+   ```powershell
+   powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/install.ps1 | iex"
+   ```
+
+3. **Install R** (if using R code blocks): Download from [CRAN](https://cloud.r-project.org/) and install the required packages:
+   ```r
+   install.packages(c("knitr", "rmarkdown", "reticulate"))
+   ```
+
+4. **Clone and setup**:
+   ```powershell
+   git clone <repo-url>
+   cd LB3TH_Erik
+   uv sync
+   quarto preview
+   ```
+
+### Linux / macOS
+
+1. **Install Quarto**: Download from [quarto.org](https://quarto.org/docs/get-started/) or use your package manager
+
+2. **Install uv**:
+   ```bash
+   curl -LsSf https://astral.sh/uv/install.sh | sh
+   ```
+
+3. **Install R** (if using R code blocks):
+   ```bash
+   # Ubuntu/Debian
+   sudo apt install r-base
+   # Then in R:
+   install.packages(c("knitr", "rmarkdown", "reticulate"))
+   ```
+
+4. **Clone and setup**:
+   ```bash
+   git clone <repo-url>
+   cd LB3TH_Erik
+   uv sync
+   quarto preview
+   ```
+
+### WSL2 (Windows Subsystem for Linux)
+
+Follow the Linux instructions above. Note that the preview server URL (e.g., `http://localhost:3872`) is accessible from your Windows browser.
+
+### Cross-Platform Notes
+
+- The `.Rprofile` automatically detects Windows vs Unix and configures the correct Python path
+- The `.venv` directory is platform-specific and created fresh by `uv sync` - it's gitignored
+- The `_freeze/` directory contains cached computation results and IS committed (platform-independent)
+- If you only edit content (no R/Python code changes), you don't need R or Python installed - Quarto uses the frozen results
+
 ## Quick Start
 
 ```bash
