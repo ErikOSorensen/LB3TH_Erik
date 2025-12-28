@@ -1,0 +1,17 @@
+{
+  "hash": "10d2cbb2799cca14d4cc3573eac71276",
+  "result": {
+    "engine": "knitr",
+    "markdown": "---\ntitle: \"10MHz Colpitts oscillator\"\ndescription: \"10MHz Colpitts oscillator\"\ndate: 2020-11-01\n---\n\n\n\n\n\nI've been thinking about 10MHz to sync the time in the instruments, and also as a\nreference for on-air radio. A place to start is with a simple crystal oscillator, and\nI build the buffered version of a Colpitts oscillator, in the circuit \nknown as the G3UUR oscillator (taken from page 7.38 of [Experimental Methods in RF Design](https://www.amazon.com/Experimental-Methods-Design-ARRL-Inc/dp/087259923X):\n\n![Schematic](images/colpitts_page1.png)\n\n\nI used a 10MHz crystal that came in a cheap ebay assortment kit. \nThe circuit oscillates at what appears, according to my HP53131a counter, at 9,998,127 Hz.\nSo slightly low - or perhaps my counter is off? Difficult to know without a reference \n(which will come later). For know, I just note that it oscillates at around 10MHz.\n\n![The oscillator on the bench.](images/2020-10-28-colpitts.jpg)\n\n\n\nInstead of trying to calculate what the output impedance of the circuit is, I use my\nRigol DS2072a oscilloscope to measure the peak-to-peak voltage at the output with\ndifferent loads. I press the load resistor directly down on the board. Without any load\nexcept the high-impedance of the oscilloscope, I measure 1.950 Vpp. With the load resistors,\nas in the figure below. \n\n\n\n\nNote that for low resistor loads, the amplifier also didn't have enough drive to\npreserve the symmetric shape of the signal, which makes me think that we should \nfocus on the higher loads for calculating the output impedance. \n\nThe voltage out can be represented as a pure voltage source plus the internal\nresistance $R_O$ (output impedance) in series with the resistive load to ground. Then\nI am measuring the output at a stage in a voltage divider formed by $R_o$ and my\nload resistor $R_L$, \n$$ V_L = \\frac{R_L}{R_L+R_O} V_O.$$ So for two different loads $(R_L,R_L')$ \nand measured voltages $(V_L, V_L')$, we get the ratio\n$$ \\frac{V_L'}{V_L} = \\frac{R_L'}{R_L+R_L'} \\frac{R_O + R_L}{R_L},$$\nsolving this and putting into a function, we have\n\n\n::: {.cell}\n\n```{.r .cell-code}\noutput_impedance <- function(v1,v2,r1,r2) {\n  vratio <- v2/v1\n  rratio <- r2/r1\n  (r2 - vratio * r2) /(vratio - rratio)\n}\n```\n:::\n\n\n\nUsing the 100R and 500R measurements, I calculate an output impedance of \n81, with\nthe 50R, 150R I get \n67. With the lower resistor of 50Ohm, the curve shape was distorted most, \nso I go with the interpretation of about 80 ohm output impedance. Matching to 50Ohm would require a transformer with a turns-ratio\nof \n1.3, I'm not sure that would be worth it for now.  \n",
+    "supporting": [
+      "index_files"
+    ],
+    "filters": [
+      "rmarkdown/pagebreak.lua"
+    ],
+    "includes": {},
+    "engineDependencies": {},
+    "preserve": {},
+    "postProcess": true
+  }
+}
