@@ -1,0 +1,17 @@
+{
+  "hash": "a53ec12077cc27c1f1062060e39b0031",
+  "result": {
+    "engine": "knitr",
+    "markdown": "---\ntitle: \"Experiments with Kjell ferrites\"\ndescription: \"Experiments with Kjell ferrites\"\ndate: 2020-11-08\n---\n\nI've bought some ferrites from \"Kjell\", a local electronics chain. \nThe ferrites I bought are the [largest clamp-on style ferrites they\nsell](https://www.kjell.com/no/produkter/data/datamaskinkomponenter/kontakter/ferrittblokk-12-mm-p90369). \nI don't know what material they are made of. \n\n\n![Kjell's largest ferrite core](images/Kjell-core.jpg)\n\n\nI've run a simple experiment: Connecting my Rigol signal generator to my Rigol oscilloscope\n(terminated at 50 ohm), running either 1 or 7 turns through a ferrite core (7 turns \ncorresponds to the length of a stray wire on my bench). The improvised setup is probably not good above\n15 MHz (when the measures voltages get very low), but I'll present my first rought data in terms \nof calculated impedance. \n\nSince both the generator and the scope is terminated in 50 ohms, the measured voltage at the scope end\nshould be \n$$V_s = \\frac{50}{50 + 50 + X_{f}} V_{g},$$\nwith $X_{f}$ being the unknown impedance, $V_g$ the voltage out of the generator and $V_s$ the\nvoltage measured at the scope, and we have \n$$X_f = \\frac{V_g}{V_s}\\cdot 50 - 100.$$\nI sent 1V rms out of the generator. \n\n\n\n\n\n::: {.cell}\n::: {.cell-output-display}\n![](index_files/figure-html/unnamed-chunk-2-1.png){width=672}\n:::\n:::\n\n\nThis is solid impedance also at the lower frequencies, even with only\none turn, and might indicate that the cores are made of a material that\nwill be useful RFI suppression at HF frequencies.  \n",
+    "supporting": [
+      "index_files"
+    ],
+    "filters": [
+      "rmarkdown/pagebreak.lua"
+    ],
+    "includes": {},
+    "engineDependencies": {},
+    "preserve": {},
+    "postProcess": true
+  }
+}

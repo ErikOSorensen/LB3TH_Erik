@@ -1,0 +1,84 @@
+---
+title: "Experiments with Kjell ferrites"
+description: "Experiments with Kjell ferrites"
+date: 2020-11-08
+---
+
+I've bought some ferrites from "Kjell", a local electronics chain. 
+The ferrites I bought are the [largest clamp-on style ferrites they
+sell](https://www.kjell.com/no/produkter/data/datamaskinkomponenter/kontakter/ferrittblokk-12-mm-p90369). 
+I don't know what material they are made of. 
+
+
+![Kjell's largest ferrite core](images/Kjell-core.jpg)
+
+
+I've run a simple experiment: Connecting my Rigol signal generator to my Rigol oscilloscope
+(terminated at 50 ohm), running either 1 or 7 turns through a ferrite core (7 turns 
+corresponds to the length of a stray wire on my bench). The improvised setup is probably not good above
+15 MHz (when the measures voltages get very low), but I'll present my first rought data in terms 
+of calculated impedance. 
+
+Since both the generator and the scope is terminated in 50 ohms, the measured voltage at the scope end
+should be 
+$$V_s = \frac{50}{50 + 50 + X_{f}} V_{g},$$
+with $X_{f}$ being the unknown impedance, $V_g$ the voltage out of the generator and $V_s$ the
+voltage measured at the scope, and we have 
+$$X_f = \frac{V_g}{V_s}\cdot 50 - 100.$$
+I sent 1V rms out of the generator. 
+
+```{r}
+#| include: false
+library("tidyverse")
+df <- tribble(~frequency, ~turns, ~measurement,
+              1, 1, 500,
+              2, 1, 475,
+              3, 1, 451,
+              4, 1, 430,
+              5, 1, 410,
+              6, 1, 392,
+              7, 1, 376,
+              8, 1, 355,
+              9, 1, 337,
+              10,1, 324,
+              11,1, 311,
+              12,1, 299,
+              13,1, 290,
+              14,1, 278,
+              15,1, 275,
+              1,7,126,
+              2,7,58.5,
+              3,7,39.7,
+              4,7,32.1,
+              5,7,25.6,
+              6,7,21.33,
+              7,7,18.64,
+              8,7,16.5,
+              9,7,14.11,
+              10,7,12.4,
+              11,7,10.5,
+              12,7,9.2,
+              13,7,8.4,
+              14,7,4.7,
+              15,7,4.5) %>%
+  mutate( Xf = 1000/measurement * 50 - 100)
+```
+
+
+```{r echo=FALSE, warning=FALSE}
+df %>% ggplot( aes(x=frequency, y=Xf, group=as.factor(turns), color=as.factor(turns))) + 
+  geom_point() +
+  geom_line() +
+  theme_minimal() +
+  labs(x = "Generator frequency (MHz), log scale",
+       y = "Implied impedance (Ohms), log scale",
+       title = "Impedance vs frequency of Kjell\'s ferrite blocks",
+       color = "Turns on core:") +
+  scale_x_continuous(trans='log10') +
+  scale_y_continuous(trans="log10") +
+  theme(plot.title.position = "plot")
+```
+
+This is solid impedance also at the lower frequencies, even with only
+one turn, and might indicate that the cores are made of a material that
+will be useful RFI suppression at HF frequencies.  

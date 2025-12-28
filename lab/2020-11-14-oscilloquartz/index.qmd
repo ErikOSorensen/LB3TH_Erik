@@ -1,0 +1,169 @@
+---
+title: "Are my 10MHz Oscilloquartz oscillators too old?"
+date: 2020-11-14
+---
+
+
+```{r}
+#| include: false
+library("tidyverse")
+```
+
+I have 2 10 MHz Oscilloquartz 8863 modules (rebranded as UCT) that I have bought used from ebay
+with an intention of building either a better internal reference
+for my frequency counter (a HP53131a) or an external 10MHz reference
+for lab distribution. 
+These  oscillators can be controlled by plus/minus 0.3 ppm with a control
+voltage between 0 and 10V, but my worry is that they are too old, 
+and have drifted so far that they are difficult to control to exactly 10MHz. 
+But how to measure the reliability of an oscillator without a reliable frequency
+counter? 
+
+My strategy is to use a GPS module that I also have bought of ebay, a cheap ublox 7m
+module conveniently brings out 1pps to a pin. This should be straight from the satelite
+feed, so if I use my inaccurate counter to measure the period of the 1pps 
+signal, I can get a hang on how far off my counter is and calculate a correction
+factor. Then I'll measure my Oscilloquartz units at different control voltages to
+see if it looks like they are able to get 10MHz into their control range.
+
+# Measuring the 1pps GPS signal
+
+```{r}
+#| include: false
+gps_period <- c(
+  1.0000002293  ,
+  1.0000002275  ,
+  1.0000002298  ,
+  1.0000002303  ,
+  1.0000002345  ,
+  1.0000002348  ,
+  1.0000002363  ,
+  1.0000002385  ,
+  1.0000002422  ,
+  1.0000002365  ,
+  1.0000002393  ,
+  1.0000002373  ,
+  1.0000002385  ,
+  1.0000002318  ,
+  1.0000002418  ,
+  1.0000002365  ,
+  1.0000002287  ,
+  1.0000002317  ,
+  1.0000002308  ,
+  1.0000002292)
+```
+
+I have never measured periods with my counter before, and I struggled initially to 
+find the right sensitivity and trigger level. On my scope, I found that the 1pps 
+pulse was a square 100ms long pulse at 3.3V. In the end I set the trigger level to 1V manually,
+and this worked fine. I made 20 measurements of the period, and found and average period
+of `r format(mean(gps_period), digits=12)` seconds, with a standard deviation of `r format(sd(gps_period), digits=3)`. So it 
+seems that the oscillator of my counter is running a bit high.
+
+```{r}
+#| include: false
+gps_df <- tibble(period=gps_period-1)
+gps_df %>% ggplot(aes(x=period)) + 
+  geom_histogram(bins=6) + 
+  theme_minimal() +
+  labs(x="Size of deviations (in s)",
+       caption="Histogram of deviations from 1s")
+```
+
+
+# Measurement of oscillators
+I mark the oscillators "A" and "B" to keep them apart. 
+
+I measure them in three states: 1) Without touching the control voltage  (CV) pin (in which case I can measure 4.4V on the pin), 
+2) shorting the CV pin to the voltage reference (VR) pin, which should be around 8V (I measure a bit lower), and 3) shorting VC to GND. 
+Before measurement I let the oscillators warm up by noticing when the current draw went from 0.5A to around 0.2A and then give them
+a couple of additional minutes to stabilize.
+
+
+```{r}
+#| include: false
+oscilloquartz <- tribble(
+  ~unit, ~vc, ~freq,
+  "A", "NC", 9999986.4634, 
+  "A", "NC", 9999986.4676, 
+  "A", "NC", 9999986.4709, 
+  "A", "NC", 9999986.4706, 
+  "A", "NC", 9999986.4804,
+  "A", "VR", 9999989.8369 ,
+  "A", "VR", 9999989.8504 ,
+  "A", "VR", 9999989.8547 ,
+  "A", "VR", 9999989.9161 ,
+  "A", "VR", 9999989.9734 ,
+  "A", "GND", 9999982.8122 ,
+  "A", "GND", 9999982.8097 ,
+  "A", "GND", 9999982.8395 ,
+  "A", "GND", 9999982.8892 ,
+  "A", "GND", 9999982.8850 ,
+  "B", "NC", 9999998.9790 , 
+  "B", "NC", 9999999.0083 , 
+  "B", "NC", 9999999.0584 , 
+  "B", "NC", 9999999.0344 , 
+  "B", "NC", 9999999.0365 , 
+  "B", "NC", 9999999.0525 , 
+  "B", "VR", 10000002.0915 ,
+  "B", "VR", 10000002.0830 ,
+  "B", "VR", 10000002.1103 ,
+  "B", "VR", 10000002.1336 ,
+  "B", "VR", 10000002.1550 ,
+  "B", "GND", 9999995.8769 ,
+  "B", "GND", 9999995.8866 ,
+  "B", "GND", 9999995.9022 ,
+  "B", "GND", 9999995.8966 ,
+  "B", "GND", 9999995.9031)
+```
+
+To determine the reliability of my measurements, I should take into account the errors involved
+in my measurement of the GPS period. Assuming independence in these
+estimates, the formula for the variance of a product 
+is 
+$$ var(XY) = var(X)var(Y) + var(X)E(Y)^2 + var(Y) E(X)^2,
+$$
+so based on two vectors of measurements, I should be able to calculate
+the estimated standard error of the product using this function: 
+```{r}
+se_product <- function(X,Y) {
+  vxm <- var(X)/length(X)
+  vym <- var(Y)/length(Y)
+  ex <- mean(X)
+  ey <- mean(Y)
+  vxy <- vxm*vym + vxm*ey^2 + vym*ex^2
+  sqrt(vxy)
+}
+```
+After correcting for the error in the counter, 
+these are my measurements and estimated error-bars:
+```{r}
+#| echo: false
+oscilloquartz %>% 
+  group_by(unit,vc) %>%
+  mutate(corrected_frequency = freq*mean(gps_period)) %>%
+  summarize(mean_corrected_frequency = mean(corrected_frequency),
+            se_corrected_frequency = se_product(gps_period, freq)) %>%
+  ggplot(aes(x=vc,
+             y=mean_corrected_frequency, 
+             ymin=mean_corrected_frequency-se_corrected_frequency,
+             ymax=mean_corrected_frequency+se_corrected_frequency,
+             color=unit)) +
+  geom_point() + 
+  geom_errorbar(width=0.2) +
+  theme_minimal() +
+  labs(x="Connection of control voltage pin",
+       y="Mean corrected frequency (in Hz) \u00b1 s.e.m.",
+       caption="Measured frequency with different control voltages")
+```
+
+The error-bars really are that vertically compressed...
+
+What to conclude?
+
+1. The 8V of control voltage does seem to create a reasonable tuning range of the oscillator, in  both units. 
+2. Unit "A" has drifted to far to be useful. Even if it probably possible to put up to 10V (2 above the VR level), this won't be sufficient to get unit A up to 10 MHz. I don't know what other uses I can find for this oscillator, so yes, it seems like this oscillator is too old to be useful.
+3. Unit "B" is in much better health, about 2V at the VR pin should get this unit to 10MHz. 
+
+
+
