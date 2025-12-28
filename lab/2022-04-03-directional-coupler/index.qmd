@@ -1,0 +1,208 @@
+---
+title: Experiments with a directional coupler
+date: 2022-04-03
+categories: [station-power-meter]
+---
+
+```{r}
+#| message: false
+#| warning: false
+#| include: false
+library(tidyverse)
+library(gt)
+```
+
+
+It has been a radio weekend. Not only have worked a bit of HF (including 
+Morocco and the Canary Islands!), but I have finally gotten around to winding
+transformers for the directional coupler of a station power/SWR meter.  A while
+back I ordered a batch of PCBs for DJ0ABRs power meter 
+[U02 - Power / SWR measuring coupler](https://youtu.be/hSHQAcMrIEk).  It was 
+designed to be part of his kilo-Watt amplifier. This seemed like a good 
+idea at the time. 
+
+# Design and build
+
+The main design concept is to use a tandem match directional coupler, 
+and then use highly sensitive AD8307 log amplifier to measure the forward
+and the reflected power. 
+[Alan Wolke, W2AEW, has an explanation of how this coupler works.](https://youtu.be/byF1FLdbUiA) 
+The AD8307 log amplifier I have used also as part of my stand-alone lab 
+power meter (still need to fix some software bugs).
+
+![Schematic of coupler.](images/LRM_20220403_145820.jpg){width=600px}
+
+The schematics of the coupler is not complicated, but I only feel I understand
+it fully in short glimpses. The core idea is to sense both current and voltage
+in the line from A to B, and that can be measured over C and D to give us the 
+forward and the reflected power. The full design then use 50 Ohm terminations 
+and an AD8307 each at C and D for the RF measurements. The two transformers 
+are $1:N$ turns (with the one turn being a coax through the center of 
+ring ferrite cores that have the $N$ windings). There is also an electrostatic
+shield connected to ground. 
+
+I built it up on one of the board I had ordered. Everything looks
+very good on the nano VNA - fully terminated, the return loss at the transmitter
+port is 35 dB or more.
+
+![Picture of coupler and VNA.](images/LRM_20220403_133731.jpg){width=600px}
+
+# Measurements
+
+```{r}
+#| include: false
+measurements_df <- tribble(
+  ~frequency, ~Pin, ~Pforward, ~Preflected, ~Rload,
+  10, 10, -12, -36, "50R",
+  50, 10, -12, -32, "50R",
+  50, -10, -32, -56, "50R",
+  50, -10, -32, -32, "open",
+  50, -10, -32, -33, "short",
+  50, -10, -31.5, -42.3, "25R", 
+  1, -10, -32, -63, "50R",
+  10, -10, -31, -64, "50R",
+  20, -10, -30, -61, "50R",
+  30, -10, -31, -61, "50R",
+  40, -10, -31, -58, "50R",
+  50, -10, -31, -57, "50R",
+  60, -10, -31, -55, "50R",
+  70, -10, -33, -55, "50R", 
+  80, -10, -34, -56, "50R",
+  90, -10, -45, -66, "50R"
+) %>% mutate( RL = Pforward - Preflected)
+```
+
+For measurements, I used the TinySA spectrum analyzer. I put -10dBm into
+the transmitter port at 50MHz, varied the load impedance, and measured the power
+in the forward and the reflected port (taking care that the measurement
+port that wasn't connected was terminated with 50 Ohm). 
+
+Here are the measurements, Power is measured in dBm and the calculated 
+return loss (RL) in dB:
+
+```{r}
+#| echo: false
+measurements_df %>% slice(3:6) %>% gt()
+```
+
+
+Note that R presents this with a bit more apparent precision that is called for.
+
+To the results:
+
+1. With proper termination, we measure 22 dB down in the forward direction. Since
+1/12 in voltage correspond to $-20 \log_{10}(12)=-21.6$ dB, that is reasonable.
+A return loss of 24 is quite good, corresponding to a SWR of about 1.1.
+2. With an open load, all power is reflected, as expected.
+3. The short was improvised with a pair of tweezer in the BNC jack. At 50MHz 
+probably imperfect. So a tiny bit of return loss.
+4. With two 50 Ohm loads in parallel (on a T adapter), the return loss was 11 dB.
+and the short (implemented with a pair of tweezers) was probably not a good
+RF short. Theoretically, the return loss should be $-20 \log_{10} \Gamma$, with
+$\Gamma$ being the reflection coefficient. With a purely resistive load of 25 Ohm, 
+$\Gamma  = |25 - 50|/|25 + 50| = 1/3$, and the calculated return loss should be 
+9.5. Instead I measure more than one dB more. But with the return loss being
+the difference between two imprecise measurements, I don't think this is a 
+something to worry about. 
+
+
+I also kept the input constant at -10 dBm and varied the frequency from 1 to
+90 MHz: 
+
+```{r}
+#| echo: false
+measurements_df %>% slice_tail(n=10) %>% gt()
+```
+
+Respecting the accuracy of the measurements, it seems that the the coupler
+behaves well up to 60-70 MHz, and the gross deviations from linearity only
+happens above 80 MHz. I am quite happy about this. 
+
+# Design considerations going forward 
+
+The important question is how turns should be wound on the transformers. 
+DJ0ABR design with 24 turns, for a 2kW capacity. I have no planned need
+to measure that large amount of power, and there are two costs to having too
+many turns: First, there is limited dynamic range in the measurement system.
+Second, more turns will degrade performance of the transformers at higher 
+frequencies. 
+
+One place to start is with the capacity of the 
+[AD8307](https://www.analog.com/en/products/ad8307.html). It is specified 
+to measure up to 17 dBm and down to -75 dBm. I would also like to have 
+accurate measure of return loss with QRP rigs running perhaps only 1W. I try
+to calculate some scenarios.
+
+First, let's vary the number of turns from 10 to 30. Then, I would like 
+to measure the reflected power for a good match with a return loss of 25 dB.
+I calculate what forward and reflected powers I'll need to have the sensor
+read for different powers from the transmitter and see how this range
+fits within the dynamic range of AD8307. 
+
+Note that there is also a voltage divider in front of the AD8307
+in DJ0ABR's design. This also involves a coupler of DC blocker 
+capacitors, but these are large and basically shorts at 
+RF. The internal impedance of AD8307 is, according to the 
+datasheet, about 1k1 Ohm. In the design, this is paralleled
+with an 180R resistor, giving a parallel resistance
+of `r format( 1/(1/180 + 1/1100), digits=2)`. This is the lower leg of a divider
+with 470R in the upper leg, so the voltage division
+is by a factor of around `r  format(( 1/( 1/180 + 1/1100) + 470) / ( 1/( 1/180 + 1/1100)), digits=2)`,
+or `r format(-20*log10( ( 1/( 1/180 + 1/1100) + 470) / ( 1/( 1/180 + 1/1100))), digits=3)` dB.
+
+
+
+```{r}
+#| include: false
+df <- tibble(turns = seq(10,30)) %>%
+  mutate(pu1000 = (log10(1000)*10 + 30) - 20*log10(turns),
+         pu100 =  (log10(100)*10 + 30) - 20*log10(turns),
+         pu10 =  (log10(10)*10 + 30) - 20*log10(turns),
+         pu1 =  (log10(1)*10 + 30) - 20*log10(turns),
+         pu0.1 =  (log10(0.1)*10 + 30) - 20*log10(turns),
+         pu0.01 =  (log10(0.01)*10 + 30) - 20*log10(turns),
+         pu0.001 =  (log10(0.001)*10 + 30) - 20*log10(turns))  %>%
+  pivot_longer(cols= starts_with("pu"), 
+               names_prefix="pu", 
+               names_to = "transmitter_power",
+               values_to = "pforward") %>%
+  mutate( transmitter_power = as.numeric(transmitter_power),
+          preflected = pforward - 25) %>%
+  pivot_longer(cols = c("pforward","preflected"), 
+               names_prefix = "p",
+               names_to = "measurement",
+               values_to = "power_dBm") %>%
+  mutate( measurement = factor(measurement),
+          power_dBm = power_dBm - 12.1) # The voltage divider.
+```
+
+
+```{r}
+#| echo: false
+df %>% ggplot(aes(x=turns, y=power_dBm, group=measurement, color=measurement)) +
+  geom_line() +
+  facet_wrap( ~ transmitter_power) + 
+  geom_hline(yintercept = 17, ) + 
+  geom_hline(yintercept = -75) + 
+  theme_minimal() + 
+  theme(plot.title.position = "plot") +
+  labs( y = "Power into AD8307 (in dBm)",
+        x = "Number of turns on transformer",
+        caption = "The horizontal black lines indicate the dynamic range of AD8307 chip.")
+```
+
+I don't completely understand how DJ0ABR can use this design to 
+measure up to 2 kW with only 24 turns. Maybe the resistor network 
+in front of the chip could be adjusted, or maybe a modification
+is called for. 
+
+If I were to change anything about the design, I think that I also
+would like to create a bit more space for the transformers. The 1-turn
+of coax through the ferrite cores makes it difficult to solder the very
+short piece of the shield without melting the coax. Perhaps it is my Ultraflex
+coax that doesn't take heat well, but putting things together would be easier 
+with more space. Maybe that would compromise the coupler at VHF. But if I could
+run with fewer turns on the transformer, I think that would make more of a
+difference at 50 (and maybe 70) Mhz.
+
+

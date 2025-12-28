@@ -1,0 +1,124 @@
+---
+title: A broadband (HF) amplifier, a step towards a logging power meter
+date: 2020-12-27
+---
+
+# Background 
+
+I want to make a meter for my amateur radio station that can log transmitted power, swr, and the transmitted
+frequency to a file.  For the detector, I'll use a directional coupler with AD8307 log-amplifiers. I have 
+submitted the gerber files from [DJ0ABR's site](https://dj0abr.de/english/technik/dds/epwrswrV2.htm) to 
+[JLCPCB](https://jlcpcb.com/), this directional coupler makes the power measurement a matter of the reading
+the DC-voltage coming of the forward and reflected log amplifiers. For detecting the frequency of transmission,
+and Arduino can easily count the frequency to the accuracy that I need. But the microcontroller needs some 
+pre-processing to read the frequency from the directional coupler.
+
+The frequency counting issue was addressed by Larry Phipps, N8LP, in his [2006 QEX paper on the LP100](http://www.telepostinc.com/Files/phipps-1.pdf).
+His solution is to amplify the forward measurement (by a lot), then limiting this, level shifting, and sending
+this straight into a microcontroller. If I am to to count using an Arduino, I also need to divide down the frequency
+before sending the TTL level signal to the Arduino, but this shouldn't be a problem (with 74HC14 to square up the RF and an 74HC390 to divide
+the frequency down to something the Arduino can count). I figured I should run the frequency detect amplifier of N8LP for a test.
+
+The amplifier in question is a simple 3-transistor class A amplifier like this (with some value substitutions to reflect what I have on hand):
+
+![](images/bredband_crop_page1.png)
+
+# Building the amplifier
+
+I used this as an occasion to try out the construction technology I've seen
+[Thomas Knutsen, LA3PNA, use in a youtube video](https://youtu.be/qdc9N2Hags8).
+Using the cutter disc that I have for my Dremel, I ended up with this:
+
+![Dremel-cut copper clad board](images/2020-12-27_18.22.44.jpg)
+
+
+Esthetically, this is only a partial success. And since my Dremel cut-off wheel was fairly large (a diameter
+of 38mm), it was difficult to avoid overshooting the cuts. And for Q2 and Q3, the T-joint for the
+transistors have these overshoot where the collector is intended to go. This made it add some wires to
+the installation of these transistors, and the end result is not beautiful. But after some fiddling around,
+it seems to work in this fairly ugly state (with 0805 for the capacitors and resistors):
+
+![Built up amplifier](images/2020-12-27_20.07.31.jpg)
+
+# Measurements
+Hooking the amplifier up to 12V, it draws around 60mA. I used my HP8657A as a signal source and my Rigol 2072A
+oscilloscope 
+to measure the output (with an 10:1 probe). 
+
+The amplifier is fairly high impedance input and intended for a high impedance output. 
+I used the oscilloscope as the load on the amplifier, and started with the signal generator set to a level of
+-60dBm at 1MHz. As expected, the gain of the amplifier dropped off with frequency; I re-adjusted the level out of the frequency generator as I adjusted the frequency from 1MHz to 30MHz. These are my measurements:
+
+```{r}
+#| echo: false
+#| message: false
+#| warning: false
+library(tidyverse)
+df <- tibble(frequency=seq(1,30,1), 
+             hp8657a_setting=c(rep("-62 dBm", 9), rep("-50 dBm",10), rep("-38 dBm",11)),
+             hp8657a_level = c(rep(-62,9), rep(-50,10), rep(-38,11)),
+             vpp = c(4.8,
+                     5.6,
+                     5.36,
+                     4.40,
+                     3.920,
+                     3.12,
+                     2.58,
+                     2.08,
+                     1.76,
+                     4.00,
+                     3.700,
+                     3.260,
+                     2.940,
+                     2.560,
+                     2.320,
+                     2.100,
+                     1.920,
+                     1.760,
+                     1.600,
+                     4.018,
+                     4.00,
+                     3.760,
+                     3.600,
+                     3.280,
+                     3.200,
+                     2.900,
+                     2.720,
+                     2.480,
+                     2.320,
+                     2.240))
+df %>% ggplot(aes(x=frequency, y=vpp, group=hp8657a_setting, color=hp8657a_setting)) +
+  geom_point() +
+  theme_minimal() +
+  labs(x = "Frequency (in MHz)",
+       y = "Output (Vpp)", 
+       color ="Input level")
+```
+
+The input impedance is high, and the load is also high impedance. To calculate
+the gain in terms of voltage alone, I take into account that the input is twice
+that of the indicated input power (since it is not divided by two in a 50-ohm termination).
+
+Adjusting for the increasing input power, I calculate the following gain based on the
+voltage input and outputs:
+
+```{r}
+#| echo: false
+#| warning: false
+df_db <- df %>% mutate(P = 10^(hp8657a_level/10)/1000,
+                       Vnom = sqrt(50*P),  # RMS value
+                       Vin = 2*Vnom,       # RMS value
+                       A = (vpp/(2*sqrt(2))) / Vin,
+                       dB = 20*log10(A))
+df_db %>% ggplot(aes(x=frequency, y=dB)) +
+  geom_point() + 
+  theme_minimal() +
+  labs(x = "Frequency (in MHz)",
+       y = "Gain (in dB)")
+```
+
+The discontinuities at 10 and 20 MHz might be due to compression/distortion at those those levels. 
+To conclude, the gain of the amplifier is severely decreasing in frequency. 
+(This is a feature of the design not of weaknesses in my build, it is confirmed 
+by simulations in LTSpice.) But the amplifier does provide about 43 dB at 30 MHz, sufficient to activate
+the frequency counter (?). 

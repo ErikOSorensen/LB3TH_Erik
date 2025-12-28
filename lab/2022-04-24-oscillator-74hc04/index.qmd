@@ -1,0 +1,26 @@
+---
+title: Oscillator, 10MHz, 74HC04
+date: 2022-04-24
+---
+
+It should be possible to use an inverter to create a simple oscillator,
+and with a crystal it should be possible to set its frequency. This is a 
+design that is everywhere:
+
+![](images/oscillator_small.png){width=600px}
+
+I built this using stripboard:
+
+![](images/LRM_20220424_141044_small.png){width=600px}
+
+Powering it from 5V, it does seem to work.
+The circuit draws a surprising amount of current: 40mA at 5V. 
+Without any termination
+the waveform is not beautiful. Here is a screenshot from my oscilloscope:
+
+![](images/DS2_2022424141051_small.png){width=600px}
+
+I attempt to terminate it in 50 ohm at the scope end, 
+and that cleans up the waveform somewhat. I'm also happy to see that it has the strength to power such a load:
+
+![](images/DS2_2022424144216_small.png){width=600px}

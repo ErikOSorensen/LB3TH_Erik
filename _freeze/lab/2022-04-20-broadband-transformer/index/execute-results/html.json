@@ -1,0 +1,17 @@
+{
+  "hash": "7e768d7d8e5d33a94cc57ec7ab78b32b",
+  "result": {
+    "engine": "knitr",
+    "markdown": "---\ntitle: Small-signal broadband 1:1 transformer\ndate: 2022-04-20\n---\n\n\nI've been thinking about an application where I want to provide \ntransformer-isolated outputs (a 10MHz reference distribution amplifier). \nBut I really find working with enamel coated (\"magnet\") wire hard - stripping\nthe enamel to solder to the wire is hard, and it is hard to keep track of\nwhich wire ends belong together. So I thought, I have a spool of single strand\nCAT-5 cable for installation, what if I used a twisted pair from this\nto wind the transformer?\nI probably couldn't get as many turns on to a small core, but I decided to try.\nI managed to put 6 turns onto a T37-43 core, and soldered it to a small\nstripboard fixture with SMA edge-mount connectors: \n\n![Transformer in test fixture.](images/LRM_20220420_221622_small1.jpg){width=600px}\n\nThis is not the prettiest of transformers, and it is large compared to what\nis commercially available (such as the [Mini-Circuits ADT1-1+](https://www.minicircuits.com/pdfs/ADT1-1+.pdf)). \n\nI used to nanoVNA to measure the return loss and the attenuation of this transformer\nover 1 to 100 MHz (but I'm most interested in what happens around 10MHz). \n\n\n::: {.cell}\n::: {.cell-output-display}\n![](index_files/figure-html/unnamed-chunk-2-1.png){width=672}\n:::\n:::\n\n\n\nLooking at the graph, we see that from 3-4 MHz, the return loss is above 20 dB,\nand it stays above 15 dB until 50 MHz. The insertion loss is minimal throughout\nthe this range. For my use case, 10 MHz, I measure the return loss to be 22.2 dB,\nand the insertion loss to be 0.26 dB. This is not much worse than the \nMini-Circuits part I referenced above (which has other nice features).\n\nI conclude that transformers of this type, even with only 6 turns, \nwill work just fine for the output of a 10 MHz distribution amplifier. Note to\nself: I really should get the serial interface to the nanoVNA working such\nthat I don't have to punch the numbers myself.\n",
+    "supporting": [
+      "index_files"
+    ],
+    "filters": [
+      "rmarkdown/pagebreak.lua"
+    ],
+    "includes": {},
+    "engineDependencies": {},
+    "preserve": {},
+    "postProcess": true
+  }
+}

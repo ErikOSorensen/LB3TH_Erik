@@ -1,0 +1,148 @@
+---
+title: Rebuild of RF power tap
+date: 2022-04-24
+---
+
+Last week I built a 40 dB tap as a proof of concept, but
+two things held me back from declaring a full success:
+
+1. I didn't have metal film resistors that could take the full power of a
+100W transmitter.
+2. The plate-capacitor through coupling didn't seem very sturdy, and I made
+a through connection with a straight wire that was a tad bit on the inductive 
+side.
+
+# Build
+
+Now I have received 2W metal film resistors from Mouser, and I have built the
+plate capacitor solution with a piece of circuit board material that is held
+in place with nylon bolts. This is mechanically quite secure:
+
+![Picture of inside of tap](images/LRM_20220424_181713_small.jpg)
+
+# Measuring with NanoVNA Saver
+I figured out how to connect the nanoVNA to the computer with [NanoVNA Saver](https://github.com/NanoVNA-Saver/nanovna-saver). This allows me to
+either save a screenshot of what I saw while watching the tiny screen when
+I adjusted the length of the small wire capacitor that is parallel to the
+power resistors:
+
+![NanoVNA screenshot](images/VNA_screenshot.png)
+
+This shows that the power tap works quite well from 1 to 500 MHz, minimum
+return loss is almost 21 dB, at 440 MHz. The through insertion loss is very small.
+
+# Attempts to load NanoVNA touchstone files into R
+
+There is a package by Aaron Anderson, [rftk: RF Toolkit](https://github.com/aaronmanderson3/rftk) that supposedly can read
+touchstone files, do RF calculations and display data using ggplot. 
+
+```{r}
+#| message: false
+#| warning: false
+library(tidyverse)
+library(rftk)
+```
+
+Now, it should be possible to read the touchstone files saved by NanoVNA saver:
+```{r}
+df_thru <- read_snp("40dB_pad.s2p")
+df_pad <- read_snp("40dB_pad_attenuation.s2p")
+```
+
+We can take a look at the content of one of these files:
+```{r}
+head(df_thru)
+```
+The S12 and S22 parameters are not available in from the Nano VNA.
+
+So we can now plot the return loss and insertion loss of a through 
+connection:
+
+```{r}
+#| echo: false
+#| message: false
+#| warning: false
+df_thru %>% filter(parameter %in% c("S11","S21")) %>%
+  ggplot(aes(y=db, x = frequency, color = parameter)) + 
+  geom_line() +
+  theme_minimal() +
+  labs( x = "Frequency [MHz]",
+        y = "S-parameter [dB]",
+        title = "VNA across input and output") +
+  theme(plot.title.position = "plot")
+```
+
+Similarly, I have another set of measurement, with the VNA from
+input to the attenuated tap (and 50 ohm termination of output).
+
+```{r}
+#| echo: false
+#| message: false
+#| warning: false
+df_pad %>% filter(parameter %in% c("S11","S21")) %>%
+  ggplot(aes(y=db, x = frequency, color = parameter)) + 
+  geom_line() +
+  theme_minimal() +
+  labs( x = "Frequency [MHz]",
+        y = "S-parameter [dB]",
+        title = "VNA across input and attenuator output") +
+  theme(plot.title.position = "plot")
+```
+
+
+In theory, it should also be possible to plot these data on a Smith chart,
+there is a `geom_smith` extension to ggplot.
+The required aesthetics to the `geom_smith` are `freq`, `smag`, and `sang`.
+Frequency must be in Hz. From the example in the help, it is clear that `sang`
+is angle in radians (whereas the file was read with angles in degrees). 
+I suspect that the `smag` might be the magnitude of the 
+reflection coefficient, in which case $$|\Gamma| = 10^{S_{11}/20},$$
+with $|\Gamma|$ being the magnitude of the reflection coefficient.
+Let's try to put that into the Smith chart command.
+
+```{r}
+#| echo: false
+#| message: false
+#| warning: false
+tmp <- df_thru %>% filter(parameter == "S11") %>%
+  mutate(smag = 10^(db/20),
+         sang = ang*pi/180)
+tmp %>%  ggplot(aes(freq = frequency,
+                     smag = smag,
+                     sang = sang, 
+                    color = frequency)) +
+  geom_smith() + 
+  labs(title = "VNA across input and output, attenuator terminated") +
+  theme_minimal() +
+  theme(plot.title.position = "plot")
+```
+
+And for the attenuation output:
+
+```{r}
+#| echo: false
+#| message: false
+#| warning: false
+df_pad %>% filter(parameter == "S11") %>%
+  mutate(smag = 10^(db/20),
+         sang = ang*pi/180) %>%  
+  ggplot(aes(freq = frequency,
+                     smag = smag,
+                     sang = sang, 
+                    color = frequency)) +
+  geom_smith() + 
+  labs(title = "VNA across input and attenuator output") +
+  theme_minimal() +
+  theme(plot.title.position = "plot")
+```
+
+I suspect that there are commands in `rftk` to do the conversion between
+S-parameters and reflection coefficient, but it seems as if the documentation
+is still not finished.
+
+
+
+
+
+
+

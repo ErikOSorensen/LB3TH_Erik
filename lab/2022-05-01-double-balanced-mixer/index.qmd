@@ -1,0 +1,108 @@
+---
+title: A double balanced diode ring mixer
+date: 2022-05-01
+---
+
+I decided to build a diode ring (double) balanced mixer. The 
+design of these is fairly straight forward:
+
+![](images/mixer.png){width=600px}
+
+I built it twice. The first time I wound the transformers on T50-6 cores and
+used 1n4148 diodes. This didn't work very well. I concluded after
+a while that there were two issues working against it: First, the inductive
+reactance in parallel with the load would be low, loading down the generators.
+Second, a large drive level would be necessary to turn two 1n4148 diodes on
+at the same time. 
+
+The second time I wound the two transformers with 8 turns of trifilar wire
+on FT50-43 cores (I aimed for 10, but could only fit 8 turns of the insulated
+wire I used). I used 1n5711 Schottky diodes. These were my last 1n5711s 
+so matching these was not a possibility (I need to order more).
+The build is not beautiful:
+
+![](images/mixer_small.jpg){width=600px}
+
+
+I decided to make some measurement mixing 5 MHz to 9 MHz with a 14 MHz
+local oscillator. This would give 5 and 14 should give mixing products
+at 9 and 19 MHz. I used my HP signal generator to provide the 5 MHz
+RF and my Rigol function generator to provide the (sine) local oscillator. 
+I tried a couple of different levels of RF and LO drive, and recorded the 
+magnitudes of the two mixing products (and the RF and LO) on the IF port. 
+All measurements were made with the Tiny SA at the IF port.
+
+```{r}
+#| message: false
+#| warning: false
+#| include: false
+library(tidyverse)
+mdf <- tribble(~LO_driveVpp, ~RF_level, ~IF_5, ~IF_9, ~IF_14, ~IF_19,
+               2, -20, -59.7, -23.7, -43.6, -24.1,
+               2, -30, -69.2, -33.2, -43.6, -34.6,
+               2, -40, -79.2, -43.7, -43.6, -45.1,
+               2, -50, -88.7, -53.7, -43.6, -54.6,
+               3, -20, -60.7, -23.2, -39.6, -24.1,
+               3, -30, -70.0, -33.2, -39.6, -34.1,
+               3, -40, -79.6, -43.7, -39.6, -45.1,
+               3, -50, -90.2, -53.7, -39.6, -54.6,
+               1, -20, -59.2, -23.7, -51.1, -24.6,
+               1, -30, -68.7, -33.7, -51.1, -34.6,
+               1, -40, -78.7, -44.2, -51.1, -45.1,
+               1, -50, -88.2, -54.2, -51.1, -55.1) %>%
+  mutate(LO_drive = 20*log10(LO_driveVpp) +3.98) %>%
+  select(-LO_driveVpp) %>%
+  pivot_longer(cols = starts_with("IF_"),
+               names_prefix = "IF_",
+               values_to = "IF_level",
+               names_to = "IF_freq") %>%
+  mutate( frequency_f = factor(IF_freq, 
+                               levels = c("5","9","14","19"), 
+                               ordered=TRUE))
+```
+
+The main mixing products depend on the RF level, but not so much on the
+drive levels that I've been looking at:
+
+ ```{r}
+ #| echo: false
+mdf %>% filter(IF_freq %in% c(9,19)) %>%
+  ggplot(aes(x=RF_level, y =  IF_level, color = factor(LO_drive))) +
+  geom_line() +
+  geom_point() +
+  theme_minimal() +
+  labs(x = "RF level [dBm]",
+       y = "IF level [dBm]") +
+  facet_wrap( ~frequency_f)
+```
+
+For both of these mixing products there is an conversion loss of between
+4 and 5 dB. I don't know how good or bad that is, but I note that Mini Circuits'
+[ADE-1+](https://www.minicircuits.com/WebStore/dashboard.html?model=ADE-1%2B), also
+a double balanced diode ring mixer, is marketed as having a low 
+conversion loss at 5.0 dB. 
+
+
+For the suppression of the RF input and the local oscillator,
+we have:
+
+```{r}
+#| echo: false
+mdf %>% filter(IF_freq %in% c(5,14)) %>%
+  ggplot(aes(x=RF_level, y =  IF_level, color = factor(LO_drive))) +
+  geom_line() +
+  geom_point() +
+  theme_minimal() +
+  labs(x = "RF level [dBm]",
+       y = "IF level [dBm]") +
+  facet_wrap( ~frequency_f)
+```
+
+We see that there is 40 dB suppression of the RF input, and more than 50 dB
+suppression of the local oscillator. This is a bit worse, but not drastically
+much worse, than the Mini Circuits part referenced above.
+Given that performance with respect to the mixing products didn't depend
+a lot on the drive level, it seems unnecessary to run this mixer at levels
+higher than 4 dBm. 
+
+
