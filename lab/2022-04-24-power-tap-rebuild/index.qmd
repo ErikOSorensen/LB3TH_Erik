@@ -1,6 +1,8 @@
 ---
 title: Rebuild of RF power tap
 date: 2022-04-24
+execute:
+    eval: false
 ---
 
 Last week I built a 40 dB tap as a proof of concept, but

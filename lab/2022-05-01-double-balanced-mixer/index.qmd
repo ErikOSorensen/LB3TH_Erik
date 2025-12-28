@@ -3,6 +3,8 @@ title: A double balanced diode ring mixer
 date: 2022-05-01
 ---
 
+> Not calculating because rftk has been taken off CRAN (per 2025-12-28)
+
 I decided to build a diode ring (double) balanced mixer. The 
 design of these is fairly straight forward:
 
@@ -64,8 +66,8 @@ mdf <- tribble(~LO_driveVpp, ~RF_level, ~IF_5, ~IF_9, ~IF_14, ~IF_19,
 The main mixing products depend on the RF level, but not so much on the
 drive levels that I've been looking at:
 
- ```{r}
- #| echo: false
+```{r}
+#| echo: false
 mdf %>% filter(IF_freq %in% c(9,19)) %>%
   ggplot(aes(x=RF_level, y =  IF_level, color = factor(LO_drive))) +
   geom_line() +

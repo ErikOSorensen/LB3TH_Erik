@@ -1,0 +1,17 @@
+{
+  "hash": "e08ae5c9d73315fd1f6988c12f7a40b1",
+  "result": {
+    "engine": "knitr",
+    "markdown": "---\ntitle: A double balanced diode ring mixer\ndate: 2022-05-01\n---\n\n> Not calculating because rftk has been taken off CRAN (per 2025-12-28)\n\nI decided to build a diode ring (double) balanced mixer. The \ndesign of these is fairly straight forward:\n\n![](images/mixer.png){width=600px}\n\nI built it twice. The first time I wound the transformers on T50-6 cores and\nused 1n4148 diodes. This didn't work very well. I concluded after\na while that there were two issues working against it: First, the inductive\nreactance in parallel with the load would be low, loading down the generators.\nSecond, a large drive level would be necessary to turn two 1n4148 diodes on\nat the same time. \n\nThe second time I wound the two transformers with 8 turns of trifilar wire\non FT50-43 cores (I aimed for 10, but could only fit 8 turns of the insulated\nwire I used). I used 1n5711 Schottky diodes. These were my last 1n5711s \nso matching these was not a possibility (I need to order more).\nThe build is not beautiful:\n\n![](images/mixer_small.jpg){width=600px}\n\n\nI decided to make some measurement mixing 5 MHz to 9 MHz with a 14 MHz\nlocal oscillator. This would give 5 and 14 should give mixing products\nat 9 and 19 MHz. I used my HP signal generator to provide the 5 MHz\nRF and my Rigol function generator to provide the (sine) local oscillator. \nI tried a couple of different levels of RF and LO drive, and recorded the \nmagnitudes of the two mixing products (and the RF and LO) on the IF port. \nAll measurements were made with the Tiny SA at the IF port.\n\n\n\nThe main mixing products depend on the RF level, but not so much on the\ndrive levels that I've been looking at:\n\n\n::: {.cell}\n::: {.cell-output-display}\n![](index_files/figure-html/unnamed-chunk-2-1.png){width=672}\n:::\n:::\n\n\nFor both of these mixing products there is an conversion loss of between\n4 and 5 dB. I don't know how good or bad that is, but I note that Mini Circuits'\n[ADE-1+](https://www.minicircuits.com/WebStore/dashboard.html?model=ADE-1%2B), also\na double balanced diode ring mixer, is marketed as having a low \nconversion loss at 5.0 dB. \n\n\nFor the suppression of the RF input and the local oscillator,\nwe have:\n\n\n::: {.cell}\n::: {.cell-output-display}\n![](index_files/figure-html/unnamed-chunk-3-1.png){width=672}\n:::\n:::\n\n\nWe see that there is 40 dB suppression of the RF input, and more than 50 dB\nsuppression of the local oscillator. This is a bit worse, but not drastically\nmuch worse, than the Mini Circuits part referenced above.\nGiven that performance with respect to the mixing products didn't depend\na lot on the drive level, it seems unnecessary to run this mixer at levels\nhigher than 4 dBm. \n\n\n",
+    "supporting": [
+      "index_files"
+    ],
+    "filters": [
+      "rmarkdown/pagebreak.lua"
+    ],
+    "includes": {},
+    "engineDependencies": {},
+    "preserve": {},
+    "postProcess": true
+  }
+}
