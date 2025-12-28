@@ -1,9 +1,12 @@
 [build]
-  command = "quarto render"
+  command = """
+    curl -LO https://quarto.org/download/latest/quarto-linux-amd64.deb && \
+    dpkg -x quarto-linux-amd64.deb . && \
+    ./opt/quarto/bin/quarto render
+  """
   publish = "_site"
 
 [build.environment]
-  # Quarto will be installed automatically by Netlify
   # No Python/R needed since we use freeze
 
 [[redirects]]
