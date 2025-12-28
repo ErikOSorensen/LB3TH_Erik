@@ -27,3 +27,5 @@ Thumbs.db
 # !_freeze/
 
 /.quarto/
+
+**/*.quarto_ipynb

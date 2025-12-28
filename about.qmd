@@ -6,20 +6,24 @@ Welcome to LB3TH, my personal site documenting experiments in RF, electronics, a
 
 ## About Me
 
-*Add your introduction here - your background, interests, and what drives your experiments.*
+I've been an on-off electronics tinkerer since high school. I know that understanding something in theory while reading a text is different from the understanding that comes from building something and discovering what works or doesn't work in practice. The plan is to build and measure circuits that are in some ways "trivial" and not directly useful, and that I sometimes *know* how should work. But I think this is necessary to gradually get used to building and characterizing more complicated (and useful) things as well.
+
+The old site had issues with the tooling, and I've decided to restart with modern tooling (Positron and quarto, publishing through github and netlify).
 
 ## About This Site
 
 This site serves as a lab notebook where I document my experiments, projects, and learnings. The content is organized into:
 
-- **Lab Notes**: Chronological entries documenting experiments, measurements, and discoveries
-- **Projects**: Longer-term efforts that may span multiple lab sessions
-- **My Lab**: Overview of my workspace and equipment
+-   **Lab Notes**: Chronological entries documenting experiments, measurements, and discoveries
+-   **Projects**: Longer-term efforts that may span multiple lab sessions
+-   **My Lab**: Overview of my workspace and equipment
 
-$$
-f(z) = \frac{1}{\sqrt{2\pi}}e^{-z^2/2}
-$$
+I'll try to keep this to document my own experimentation and to provide a bit of accountability - successes and failures should be documented, and I should take enough measurements to characterize my work. I think of this as an online analog to the notebook I kept for physics experiments back in secondary school.
+
+The old site had issues with the tooling, and I've decided to restart with modern tooling (Positron and quarto, publishing through github and netlify).
 
 ## License
 
-*Add your preferred license for content here.*
+All original content on lb3th.no is licensed under the Creative Commons Attribution (CC BY 4.0) license, unless otherwise noted. You may reuse and adapt the content, including for commercial purposes, provided proper attribution is given.
+Full license text: https://creativecommons.org/licenses/by/4.0/ 
+(provided by Creative Commons)
