@@ -1,0 +1,16 @@
+---
+title: "Contact"
+---
+
+## Get in Touch
+
+*Add your preferred contact methods here.*
+
+### Amateur Radio
+
+- **Callsign**: LB3TH
+- **QTH**: *Your location*
+
+### Online
+
+*Add links to your preferred platforms (email, social media, etc.)*

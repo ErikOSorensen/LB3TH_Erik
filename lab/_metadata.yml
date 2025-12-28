@@ -1,0 +1,9 @@
+# Shared metadata for all lab notes
+
+# Default format settings
+format:
+  html:
+    toc: true
+
+# Fields that should be present in each post
+# (these are just defaults, each post can override)

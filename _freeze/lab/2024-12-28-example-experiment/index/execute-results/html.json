@@ -1,0 +1,17 @@
+{
+  "hash": "4c7513fc2d0601c808d203ec98694c6d",
+  "result": {
+    "engine": "knitr",
+    "markdown": "---\ntitle: \"Example Lab Note: Filter Response Analysis\"\ndescription: \"Demonstrating R and Python computation in a lab note\"\ndate: 2024-12-28\ncategories: [example-project]\n---\n\n\n\n\nThis is an example lab note demonstrating how to use R and Python for computations.\n\n## Introduction\n\nToday I measured the frequency response of a simple LC bandpass filter centered around 7 MHz.\n\n## Python Analysis\n\nHere's a Python code block that generates a simulated filter response:\n\n\n\n\n::: {.cell}\n\n```{.python .cell-code}\nimport numpy as np\nimport matplotlib.pyplot as plt\n\n# Frequency range (MHz)\nfreq = np.linspace(1, 15, 500)\n\n# Simple bandpass response simulation\nf0 = 7.0  # Center frequency (MHz)\nQ = 10    # Quality factor\nresponse = 1 / np.sqrt(1 + Q**2 * (freq/f0 - f0/freq)**2)\n\n# Convert to dB\nresponse_db = 20 * np.log10(response)\n\nplt.figure(figsize=(8, 5))\nplt.plot(freq, response_db, 'b-', linewidth=2)\nplt.xlabel('Frequency (MHz)')\nplt.ylabel('Response (dB)')\nplt.title('7 MHz Bandpass Filter Response')\nplt.grid(True, alpha=0.3)\nplt.axhline(y=-3, color='r', linestyle='--', label='-3 dB')\nplt.legend()\nplt.tight_layout()\nplt.show()\n```\n\n::: {.cell-output-display}\n![Simulated bandpass filter response](index_files/figure-html/fig-filter-response-1.png){#fig-filter-response width=768}\n:::\n:::\n\n\n\n\n## R Analysis\n\nHere's an R code block calculating the -3 dB bandwidth:\n\n\n\n\n::: {.cell}\n\n```{.r .cell-code}\n# Filter parameters\nf0 <- 7.0  # Center frequency (MHz)\nQ <- 10    # Quality factor\n\n# Calculate -3 dB bandwidth\nbandwidth <- f0 / Q\n\ncat(sprintf(\"Center frequency: %.1f MHz\\n\", f0))\n```\n\n::: {.cell-output .cell-output-stdout}\n\n```\nCenter frequency: 7.0 MHz\n```\n\n\n:::\n\n```{.r .cell-code}\ncat(sprintf(\"Quality factor: %.0f\\n\", Q))\n```\n\n::: {.cell-output .cell-output-stdout}\n\n```\nQuality factor: 10\n```\n\n\n:::\n\n```{.r .cell-code}\ncat(sprintf(\"-3 dB bandwidth: %.2f MHz\\n\", bandwidth))\n```\n\n::: {.cell-output .cell-output-stdout}\n\n```\n-3 dB bandwidth: 0.70 MHz\n```\n\n\n:::\n\n```{.r .cell-code}\ncat(sprintf(\"Lower cutoff: %.2f MHz\\n\", f0 - bandwidth/2))\n```\n\n::: {.cell-output .cell-output-stdout}\n\n```\nLower cutoff: 6.65 MHz\n```\n\n\n:::\n\n```{.r .cell-code}\ncat(sprintf(\"Upper cutoff: %.2f MHz\\n\", f0 + bandwidth/2))\n```\n\n::: {.cell-output .cell-output-stdout}\n\n```\nUpper cutoff: 7.35 MHz\n```\n\n\n:::\n:::\n\n\n\n\n## Measurements\n\n| Frequency (MHz) | Measured (dB) | Simulated (dB) |\n|-----------------|---------------|----------------|\n| 5.0             | -8.2          | -8.0           |\n| 6.0             | -3.1          | -3.0           |\n| 7.0             | 0.0           | 0.0            |\n| 8.0             | -2.9          | -3.0           |\n| 9.0             | -7.8          | -8.0           |\n\n## Conclusions\n\nThe measured response closely matches the simulation. The filter shows good selectivity with the expected -3 dB bandwidth of approximately 0.7 MHz.\n\n## Next Steps\n\n- Measure with higher resolution around the passband\n- Test with different load impedances\n- Compare with SPICE simulation\n",
+    "supporting": [
+      "index_files"
+    ],
+    "filters": [
+      "rmarkdown/pagebreak.lua"
+    ],
+    "includes": {},
+    "engineDependencies": {},
+    "preserve": {},
+    "postProcess": true
+  }
+}

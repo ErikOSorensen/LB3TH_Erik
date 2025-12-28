@@ -1,0 +1,29 @@
+# Quarto output
+_site/
+.quarto/
+
+# Python
+.venv/
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+
+# R
+.Rhistory
+.RData
+.Rproj.user/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Editor
+*.swp
+*.swo
+.vscode/
+.idea/
+
+# Do NOT ignore _freeze - it contains cached computations
+# !_freeze/
+
+/.quarto/

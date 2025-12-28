@@ -1,0 +1,97 @@
+/*-- scss:defaults --*/
+
+// Import Google Fonts
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,500;0,700;1,400&family=JetBrains+Mono:wght@400;500&display=swap');
+
+// Font variables
+$font-family-sans-serif: 'Roboto', -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+$font-family-monospace: 'JetBrains Mono', 'Consolas', 'Monaco', monospace;
+
+// Colors - clean light theme
+$body-bg: #ffffff;
+$body-color: #333333;
+$link-color: #0066cc;
+$code-bg: #f5f5f5;
+
+/*-- scss:rules --*/
+
+// Body text
+body {
+  font-weight: 400;
+  line-height: 1.6;
+}
+
+// Headings
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 500;
+  margin-top: 1.5em;
+  margin-bottom: 0.5em;
+}
+
+// Code blocks
+pre, code {
+  font-family: $font-family-monospace;
+  font-size: 0.9em;
+}
+
+pre {
+  padding: 1em;
+  border-radius: 4px;
+  background-color: $code-bg;
+}
+
+// Inline code
+p code, li code {
+  background-color: $code-bg;
+  padding: 0.2em 0.4em;
+  border-radius: 3px;
+}
+
+// Lab notes listing cards
+.quarto-listing-default {
+  .listing-title {
+    font-weight: 500;
+  }
+
+  .listing-date {
+    color: #666;
+    font-size: 0.9em;
+  }
+}
+
+// Project cards
+.project-card {
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 1.5em;
+  margin-bottom: 1em;
+  background: #fafafa;
+}
+
+// Figures
+figure {
+  margin: 1.5em 0;
+
+  figcaption {
+    color: #666;
+    font-size: 0.9em;
+    margin-top: 0.5em;
+  }
+}
+
+// Tables
+table {
+  width: 100%;
+  margin: 1em 0;
+  border-collapse: collapse;
+
+  th, td {
+    padding: 0.5em;
+    border: 1px solid #e0e0e0;
+  }
+
+  th {
+    background-color: #f5f5f5;
+    font-weight: 500;
+  }
+}

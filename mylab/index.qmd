@@ -1,0 +1,19 @@
+---
+title: "My Lab"
+---
+
+Welcome to my RF and electronics lab. This section provides an overview of my workspace and the equipment I use for experiments.
+
+## The Workspace
+
+*Describe your lab setup, workbench, and general arrangement here.*
+
+## Equipment Overview
+
+My lab includes test and measurement equipment, RF gear, and various tools for electronics work.
+
+- [Equipment List](equipment/index.qmd) - Detailed list of measurement devices and tools
+
+## Safety
+
+*Add any relevant safety notes for your lab work.*

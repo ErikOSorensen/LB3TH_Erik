@@ -1,0 +1,16 @@
+---
+title: "Lab Notes"
+listing:
+  id: lab-listing
+  contents: .
+  type: default
+  sort: "date desc"
+  fields: [date, title, categories, description]
+  categories: true
+  feed: true
+---
+
+Chronological documentation of experiments, measurements, and discoveries in RF and electronics.
+
+::: {#lab-listing}
+:::

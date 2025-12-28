@@ -1,0 +1,14 @@
+---
+title: "Projects"
+listing:
+  id: projects-listing
+  contents: "*.qmd"
+  type: default
+  sort: "title"
+  fields: [title, description]
+---
+
+Ongoing and completed projects in RF and electronics.
+
+::: {#projects-listing}
+:::

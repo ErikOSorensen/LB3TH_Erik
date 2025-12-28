@@ -1,0 +1,67 @@
+project:
+  type: website
+  output-dir: _site
+
+website:
+  title: "LB3TH - RF & Electronics Lab"
+  description: "Experiments in RF, electronics, and amateur radio"
+  site-url: https://lb3th.no
+
+  navbar:
+    background: light
+    left:
+      - text: "Home"
+        href: index.qmd
+      - text: "Lab Notes"
+        href: lab/index.qmd
+      - text: "Projects"
+        href: projects/index.qmd
+      - text: "My Lab"
+        href: mylab/index.qmd
+    right:
+      - text: "About"
+        href: about.qmd
+      - text: "Contact"
+        href: contact.qmd
+
+  sidebar:
+    - id: mylab
+      title: "My Lab"
+      style: floating
+      contents:
+        - mylab/index.qmd
+        - section: "Equipment"
+          contents:
+            - mylab/equipment/index.qmd
+            - mylab/equipment/example-scope.qmd
+
+  page-footer:
+    left: "LB3TH - Erik"
+    right: "Built with Quarto"
+
+format:
+  html:
+    theme:
+      light: [cosmo, styles.scss]
+    toc: true
+    code-copy: true
+    code-overflow: wrap
+    html-math-method: mathjax
+    include-before-body:
+      - text: |
+          <script>
+          window.MathJax = {
+            chtml: {
+              scale: 1,
+              mtextInheritFont: true
+            },
+            output: {
+              font: 'stix2'
+            }
+          };
+          </script>
+
+execute:
+  freeze: auto
+
+jupyter: python3

@@ -1,0 +1,34 @@
+---
+title: "Equipment"
+---
+
+Overview of test equipment and tools in my lab.
+
+## Test & Measurement
+
+| Equipment | Model | Notes |
+|-----------|-------|-------|
+| Oscilloscope | *Your model* | *Bandwidth, channels* |
+| Signal Generator | *Your model* | *Frequency range* |
+| Spectrum Analyzer | *Your model* | *Frequency range* |
+| VNA | *Your model* | *Frequency range* |
+| Multimeter | *Your model* | |
+
+## RF Equipment
+
+| Equipment | Model | Notes |
+|-----------|-------|-------|
+| Transceiver | *Your model* | *Bands, power* |
+| Antenna Analyzer | *Your model* | |
+
+## Power Supplies
+
+| Equipment | Model | Notes |
+|-----------|-------|-------|
+| Bench Supply | *Your model* | *Voltage/current range* |
+
+## Detailed Pages
+
+*Add links to detailed equipment pages as you create them. Example:*
+
+- [Example: Oscilloscope Details](example-scope.qmd)

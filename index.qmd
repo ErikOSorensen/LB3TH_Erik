@@ -1,0 +1,19 @@
+---
+title: "LB3TH - RF & Electronics Lab"
+listing:
+  id: recent-posts
+  contents: lab
+  type: default
+  max-items: 5
+  sort: "date desc"
+  fields: [date, title, categories, description]
+---
+
+Welcome to my RF and electronics lab notebook. Here I document experiments, projects, and adventures in amateur radio.
+
+## Recent Lab Notes
+
+::: {#recent-posts}
+:::
+
+[View all lab notes &rarr;](lab/index.qmd)

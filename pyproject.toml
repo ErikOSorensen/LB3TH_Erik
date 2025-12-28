@@ -1,0 +1,18 @@
+[project]
+name = "lb3th-website"
+version = "0.1.0"
+description = "LB3TH RF & Electronics Lab website"
+requires-python = ">=3.11"
+
+dependencies = [
+    "numpy",
+    "matplotlib",
+    "pandas",
+    "scipy",
+    "jupyter",
+]
+
+[tool.uv]
+dev-dependencies = [
+    "ipykernel",
+]

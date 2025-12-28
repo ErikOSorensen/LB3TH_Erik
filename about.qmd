@@ -1,0 +1,25 @@
+---
+title: "About"
+---
+
+Welcome to LB3TH, my personal site documenting experiments in RF, electronics, and amateur radio.
+
+## About Me
+
+*Add your introduction here - your background, interests, and what drives your experiments.*
+
+## About This Site
+
+This site serves as a lab notebook where I document my experiments, projects, and learnings. The content is organized into:
+
+- **Lab Notes**: Chronological entries documenting experiments, measurements, and discoveries
+- **Projects**: Longer-term efforts that may span multiple lab sessions
+- **My Lab**: Overview of my workspace and equipment
+
+$$
+f(z) = \frac{1}{\sqrt{2\pi}}e^{-z^2/2}
+$$
+
+## License
+
+*Add your preferred license for content here.*

@@ -1,0 +1,37 @@
+---
+title: "Example Project: 40m Receiver"
+description: "Building a simple direct-conversion receiver for the 40 meter band"
+listing:
+  id: related-notes
+  contents: ../lab
+  type: default
+  sort: "date desc"
+  fields: [date, title]
+  include:
+    categories: "example-project"
+---
+
+## Overview
+
+This project documents the design and construction of a direct-conversion receiver for the 40 meter amateur band (7.0-7.3 MHz).
+
+## Goals
+
+- Simple construction using readily available components
+- Adequate sensitivity for local and DX signals
+- Battery-powered for portable operation
+
+## Design
+
+*Add your design details, schematics, and notes here.*
+
+## Current Status
+
+*Document the current state of the project.*
+
+## Related Lab Notes
+
+Lab entries related to this project:
+
+::: {#related-notes}
+:::

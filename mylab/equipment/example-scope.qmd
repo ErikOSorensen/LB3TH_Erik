@@ -1,0 +1,34 @@
+---
+title: "Example: Oscilloscope"
+---
+
+*This is an example equipment detail page. Replace with your actual equipment.*
+
+## Specifications
+
+| Parameter | Value |
+|-----------|-------|
+| Bandwidth | 100 MHz |
+| Channels | 4 |
+| Sample Rate | 1 GSa/s |
+| Memory Depth | 10 Mpts |
+
+## Features
+
+- *List key features you use*
+- *Any modifications or accessories*
+
+## Calibration
+
+| Date | Type | Notes |
+|------|------|-------|
+| 2024-01-15 | Self-cal | Passed |
+
+## Usage Notes
+
+*Tips, common settings, or gotchas you've discovered.*
+
+## Documentation
+
+- [Manufacturer Manual (PDF)](#)
+- [Quick Reference](#)
