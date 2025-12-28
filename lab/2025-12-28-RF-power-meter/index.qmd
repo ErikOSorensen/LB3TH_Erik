@@ -1,0 +1,30 @@
+---
+title: "RF power meter design"
+description: "RF power meter design and vibe coding"
+date: 2025-12-28
+categories: [rf-power-meter]
+---
+
+Over Christmas, I've been thinking about making a more concerted effort
+for an RF power meter. I made a prototype a few years back, but the
+issue with this was that the electronics seemed to work, but I never
+got around to finishing the C++/Arduino code necessary for an intended
+network functionality. But now is the time, there are plenty of available
+microcontrollers that can run Python (MicroPython), and there are powerful
+AI's to do some of the heavy lifting for the scaffolding.
+
+In a dialogue with Claude Code I have vibe-coded and designed a new version 
+of a power meter. This new version is planned to have two channels,
+with the possibility of having different sensors to plug in (AD8307 for lower
+frequencies, maybe later I can add a AD8313 or an ADL5513 for higher frequencies).
+All these sensors from Analog Devices are take a RF power reading and convert
+to a DC voltage, and the main controller is basically digital control and an ADC
+reading from the sensor. 
+
+The current [design notes](https://github.com/ErikOSorensen/rf_power_meter) are available at github. I must admit that I'm impressed with how Claude Code both
+imitates a partner one can have discussions with and a junior partner that
+keeps track of documentation, consistency across files and such. Claude
+makes mistakes, about software architecture and electronics, but dialogue to
+correct this is like this junior partner also has an interest in getting
+the project to work - and it is not so automated that I feel left out of the
+loop.
