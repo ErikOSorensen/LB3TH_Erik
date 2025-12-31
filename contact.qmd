@@ -4,13 +4,17 @@ title: "Contact"
 
 ## Get in Touch
 
-*Add your preferred contact methods here.*
+You can try to email me at erik.sorensen@nhh.no.
+
+
+### Online
+
+- I have a professional website at https://statsokonomen.no/ 
+- I'm on github as https://github.com/ErikOSorensen
+- I'm on Bluesky as https://bsky.app/profile/erikosorensen.bsky.social
+- I'm at ORCiD: https://orcid.org/0000-0002-7155-4188
 
 ### Amateur Radio
 
 - **Callsign**: LB3TH
-- **QTH**: *Your location*
-
-### Online
-
-*Add links to your preferred platforms (email, social media, etc.)*
+- **QTH**: JP20qi
