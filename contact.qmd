@@ -9,12 +9,12 @@ You can try to email me at erik.sorensen@nhh.no.
 
 ### Online
 
-- I have a professional website at https://statsokonomen.no/ 
-- I'm on github as https://github.com/ErikOSorensen
-- I'm on Bluesky as https://bsky.app/profile/erikosorensen.bsky.social
-- I'm at ORCiD: https://orcid.org/0000-0002-7155-4188
+- I have a professional website at [https://statsokonomen.no/](https://statsokonomen.no/).
+- I'm on github as [https://github.com/ErikOSorensen](https://github.com/ErikOSorensen).
+- I'm on Bluesky as [https://bsky.app/profile/erikosorensen.bsky.social](https://bsky.app/profile/erikosorensen.bsky.social).
+- I'm at ORCiD: [https://orcid.org/0000-0002-7155-4188](https://orcid.org/0000-0002-7155-4188).
 
 ### Amateur Radio
 
 - **Callsign**: LB3TH
-- **QTH**: JP20qi
+- **QTH**: [JP20qi](https://k7fry.com/grid/?qth=JP20QI).
