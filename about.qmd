@@ -6,7 +6,7 @@ Welcome to LB3TH, my personal site documenting experiments in RF, electronics, a
 
 ## About Me
 
-I've been an on-off electronics tinkerer since high school. I know that understanding something in theory while reading a text is different from the understanding that comes from building something and discovering what works or doesn't work in practice. The plan is to build and measure circuits that are in some ways "trivial" and not directly useful, and that I sometimes *know* how should work. But I think this is necessary to gradually get used to building and characterizing more complicated (and useful) things as well.
+I am Erik Ø. Sørensen, and I've been an on-off electronics tinkerer since high school. I know that understanding something in theory while reading a text is different from the understanding that comes from building something and discovering what works or doesn't work in practice. The plan is to build and measure circuits that are in some ways "trivial" and not directly useful, and that I sometimes *know* how should work. But I think this is necessary to gradually get used to building and characterizing more complicated (and useful) things as well.
 
 The old site had issues with the tooling, and I've decided to restart with modern tooling (Positron and quarto, publishing through github and netlify).
 
