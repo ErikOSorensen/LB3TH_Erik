@@ -30,7 +30,7 @@ from the input to the output, which I guess would balance the inductance
 in the through connection with capacitive coupling to ground (they also used
 a short wire stub in parallel with the resistors). I tried fabricating
 such a plate out of a sardine tin, but I suspect that was made out of aluminium
-and it wouldn't solder. I tried to make one out of scap pcb material, but
+and it wouldn't solder. I tried to make one out of scrap pcb material, but
 that seemed very stiff and a mechanical problem without more support. So I decided
 to see how it would work with low power and without any attempt at high frequency 
 compensation. 
@@ -91,7 +91,10 @@ I reconfigured the testing setup: Kept the 50 ohm termination on the output,
 but connected the NanoVNA for a two port measurement - from the input port
 to the tap (the attenuated output). I recorded the 
 
-```{r echo=FALSE, message=FALSE, warning=FALSE}
+```{r}
+#| echo: false
+#| message: false
+#| warning: false
 df2 <- tribble(~frequency, ~attenuation,
                1, -39.51,
                6, -39.54,
