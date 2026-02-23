@@ -9,6 +9,8 @@
 
 [build.environment]
   # No Python/R needed since we use freeze
+  command = "true"
+  publish = "_site"
 
 [[redirects]]
   from = "/*"
