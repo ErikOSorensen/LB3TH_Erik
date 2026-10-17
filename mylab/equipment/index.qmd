@@ -8,24 +8,36 @@ Overview of test equipment and tools in my lab.
 
 | Equipment | Model | Notes |
 |-----------|-------|-------|
-| Oscilloscope | *Your model* | *Bandwidth, channels* |
-| Signal Generator | *Your model* | *Frequency range* |
-| Spectrum Analyzer | *Your model* | *Frequency range* |
-| VNA | *Your model* | *Frequency range* |
-| Multimeter | *Your model* | |
+| Oscilloscope |Siglent SDS1204X HD | 200MHz, 4ch, 12bit, LAN |
+| Signal Generator | HP8657A | 100kHz - 1040MHz, GPIB |
+| Waveform Generator | Rigol DG1032z | 30MHz, 2ch, 200 MSa/s, counter, LAN |
+| Spectrum Analyzer | Siglent SSA3021X | 2.1GHz, Tracking generator, LAN|
+| Spectrum Analyzer | TinySA Ultra+  | 100 kHz - 5.3 GHz, USB |
+| VNA | LibreVNA | 100 kHz - 6 GHz, USB |
+| Bench Multimeter | Siglent SDM3045X| 4 1/2 Digits, LAN|
+| Bench Multimeter | Keysight 34465A | 6 1/2 Digits, LAN |
+| AC Voltmeter     | HP3400A         | 10MHz |
+| Audio analyzer   | Quantasylum QA403 |  USB |
+| Counter          | HP53131A        | 3GHz option, GPIB |
+
 
 ## RF Equipment
 
 | Equipment | Model | Notes |
 |-----------|-------|-------|
-| Transceiver | *Your model* | *Bands, power* |
-| Antenna Analyzer | *Your model* | |
+| SDR receiver |SdrPlay RSPdx | 1kHz-2GHz, USB |
+| SDR transceiver | HackRF Pro | 100kHz - 6GHz, USB |
+| Antenna Analyzer | RigExpert Stick Pro | 100kHz - 600 MHz |
 
 ## Power Supplies
 
 | Equipment | Model | Notes |
 |-----------|-------|-------|
-| Bench Supply | *Your model* | *Voltage/current range* |
+| Bench supply | AIM-TTi EX752M | 2x75V, 2A |
+| Bench supply | AIM-TTi EL302RD | 2x30V, 2A |
+| Bench supply | Siglent SPD1305X | 1 x 30V, 5A, LAN |
+| DC Source | Advantest  R6144           | GPIB |
+| DC load   | RND 320/ KEL-102 | 150W, 120V, 30A, LAN | 
 
 ## Detailed Pages
 
