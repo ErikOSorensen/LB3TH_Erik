@@ -39,7 +39,16 @@ Overview of test equipment and tools in my lab.
 | DC Source | Advantest  R6144           | GPIB |
 | DC load   | RND 320/ KEL-102 | 150W, 120V, 30A, LAN | 
 
+Lab communication: Private LAN. For GPIB, an Agilent E5810A runs in
+the private LAN, which I have had problems with. But testing
+on a separate laptop, it seems to be able to dhcp connect.
+mac: 00-30-D3-19-DF-45.
+
 ## Detailed Pages
+
+
+
+
 
 *Add links to detailed equipment pages as you create them. Example:*
 
