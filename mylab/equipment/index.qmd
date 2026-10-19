@@ -15,7 +15,7 @@ Overview of test equipment and tools in my lab.
 | Spectrum Analyzer | TinySA Ultra+  | 100 kHz - 5.3 GHz, USB |
 | VNA | LibreVNA | 100 kHz - 6 GHz, USB |
 | Bench Multimeter | Siglent SDM3045X| 4 1/2 Digits, LAN|
-| Bench Multimeter | Keysight 34465A | 6 1/2 Digits, LAN |
+| Bench Multimeter | Keysight 34461A | 6 1/2 Digits, LAN |
 | AC Voltmeter     | HP3400A         | 10MHz |
 | Audio analyzer   | Quantasylum QA403 |  USB |
 | Counter          | HP53131A        | 3GHz option, GPIB |
@@ -37,19 +37,9 @@ Overview of test equipment and tools in my lab.
 | Bench supply | AIM-TTi EL302RD | 2x30V, 2A |
 | Bench supply | Siglent SPD1305X | 1 x 30V, 5A, LAN |
 | DC Source | Advantest  R6144           | GPIB |
-| DC load   | RND 320/ KEL-102 | 150W, 120V, 30A, LAN | 
+| DC load   | RND 320/KEL-102 | 150W, 120V, 30A, LAN |
 
 Lab communication: Private LAN. For GPIB, an Agilent E5810A runs in
 the private LAN, which I have had problems with. But testing
 on a separate laptop, it seems to be able to dhcp connect.
 mac: 00-30-D3-19-DF-45.
-
-## Detailed Pages
-
-
-
-
-
-*Add links to detailed equipment pages as you create them. Example:*
-
-- [Example: Oscilloscope Details](example-scope.qmd)
